@@ -24,9 +24,9 @@ class Bottomnavigatorhome extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.task,
+            Icons.book_online,
           ),
-          label: 'Projects',
+          label: 'Bookings',
         ),
         BottomNavigationBarItem(
           icon: Icon(

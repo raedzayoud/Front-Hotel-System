@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotel/calendar.dart';
 import 'package:hotel/core/utils/router.dart';
 import 'package:hotel/feature/authentication/data/repos/authentication_repo_impl.dart';
 import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/login_view.dart';
+import 'package:hotel/feature/home/presentation/home.dart';
+import 'package:hotel/feature/home/presentation/homescrren.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +26,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const LoginView(),
+        home: Homescrrenview(),
         routes: AppRouter.pageRoutes,
       ),
     );

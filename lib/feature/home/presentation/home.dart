@@ -85,11 +85,16 @@ class Home extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildHotelCard(
-                      imagePath: AssetsImage.hotel2,
-                      title: "Beach Resort",
-                      location: "Hammamet, Tunisia",
-                      rating: 4.5,
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, "Rooms");
+                      },
+                      child: _buildHotelCard(
+                        imagePath: AssetsImage.hotel2,
+                        title: "Beach Resort",
+                        location: "Hammamet, Tunisia",
+                        rating: 4.5,
+                      ),
                     ),
                     _buildHotelCard(
                       imagePath: AssetsImage.hotel2,

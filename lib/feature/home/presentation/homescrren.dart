@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel/feature/booking/presentation/booking.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/widget/Bottomnavigatorhome.dart';
 import 'package:hotel/feature/wallet/presentation/wallet.dart';
@@ -21,7 +22,7 @@ class _HomescrrenviewState extends State<Homescrrenview> {
 
   List<Widget> pages = [
     Home(),
-    Text("P"),
+    Booking(),
     Wallet(),
     Text("Settings")
   ];
