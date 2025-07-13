@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel/feature/booking/presentation/booking.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/widget/Bottomnavigatorhome.dart';
+import 'package:hotel/feature/settings/presentation/settings.dart';
 import 'package:hotel/feature/wallet/presentation/wallet.dart';
 
 class Homescrrenview extends StatefulWidget {
@@ -24,8 +25,8 @@ class _HomescrrenviewState extends State<Homescrrenview> {
     Home(),
     Booking(),
     Wallet(),
-    Text("Settings")
-  ];
+   Settings()
+   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
