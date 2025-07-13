@@ -34,15 +34,25 @@ class Booking extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                buildBookingOption(
-                  context,
-                  imagePath: AssetsImage.avion,
-                  label: 'Incoming Booking',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "incomingbooking");
+                  },
+                  child: buildBookingOption(
+                    context,
+                    imagePath: AssetsImage.avion,
+                    label: 'Incoming Booking',
+                  ),
                 ),
-                buildBookingOption(
-                  context,
-                  imagePath: AssetsImage.past,
-                  label: 'Past Booking',
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, "pastcoming");
+                  },
+                  child: buildBookingOption(
+                    context,
+                    imagePath: AssetsImage.past,
+                    label: 'Past Booking',
+                  ),
                 ),
               ],
             ),

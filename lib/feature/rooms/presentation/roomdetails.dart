@@ -15,6 +15,7 @@ class _RoomDetailsState extends State<RoomDetails> {
 
   final TextEditingController _dateControllerIn = TextEditingController();
   final TextEditingController _dateControllerOut = TextEditingController();
+  final TextEditingController _nbreofpersonne = TextEditingController();
 
   Future<void> _selectDateIn(BuildContext context) async {
     final DateTime initial = _selectedDateIn ?? DateTime.now();
@@ -235,6 +236,23 @@ class _RoomDetailsState extends State<RoomDetails> {
                 ),
               ),
             ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Divider(),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: TextFormField(
+              controller: _nbreofpersonne,
+              decoration: InputDecoration(
+                  hintText: 'Nbre of Personne',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10))),
+            ),
           ),
           SizedBox(
             height: 30,
