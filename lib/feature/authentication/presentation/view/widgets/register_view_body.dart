@@ -16,9 +16,10 @@ class RegisterViewBody extends StatefulWidget {
 class _RegisterViewBodyState extends State<RegisterViewBody> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
-  final TextEditingController confirmPassword= TextEditingController();
+  final TextEditingController confirmPassword = TextEditingController();
   final TextEditingController username = TextEditingController();
-  final TextEditingController phone = TextEditingController();
+  final TextEditingController age = TextEditingController();
+  final TextEditingController solde = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String? errorMessage;
@@ -28,7 +29,8 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
     email.dispose();
     password.dispose();
     username.dispose();
-    phone.dispose();
+    age.dispose();
+    solde.dispose();
     super.dispose();
   }
 
@@ -57,7 +59,8 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                   email: email,
                   username: username,
                   password: password,
-                  phone: phone,
+                  age: age,
+                  solde: solde,
                   confirmPassword: confirmPassword,
                 ),
               ),

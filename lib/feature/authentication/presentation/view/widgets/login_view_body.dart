@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hotel/core/utils/function/snackbar.dart';
 import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/content_body_login.dart';
+import 'package:hotel/main.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});
@@ -34,10 +35,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             snackbarerror(context, state.errorMessage);
           }
          else if (state is LoginSuccess) {
-            // sharedPreferences.setString("token", state.token);
-           // BlocProvider.of<HomeCubit>(context).getUserDetails();
-            // Navigator.of(context)
-            //     .pushNamedAndRemoveUntil("home", (route) => false);
+            sharedPreferences.setString("token", state.token);
+         //  BlocProvider.of<HomeCubit>(context).getUserDetails();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil("Homescrrenview", (route) => false);
           }
         },
         child: BlocBuilder<AuthenticationCubit, AuthenticationState>(

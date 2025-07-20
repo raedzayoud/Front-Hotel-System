@@ -4,6 +4,8 @@ import 'package:hotel/constant.dart';
 import 'package:hotel/core/utils/assets.dart';
 import 'package:hotel/core/utils/function/snackbar.dart';
 import 'package:hotel/core/utils/function/validator.dart';
+import 'package:hotel/feature/authentication/data/model/user.dart';
+import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_button.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_image.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_password_forget.dart';
@@ -19,7 +21,8 @@ class content_body_register extends StatelessWidget {
     required this.email,
     required this.username,
     required this.password,
-    required this.phone,
+    required this.age,
+    required this.solde,
     required this.confirmPassword,
   }) : _formKey = formKey;
 
@@ -28,7 +31,8 @@ class content_body_register extends StatelessWidget {
   final TextEditingController username;
   final TextEditingController password;
   final TextEditingController confirmPassword;
-  final TextEditingController phone;
+  final TextEditingController age;
+  final TextEditingController solde;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,10 @@ class content_body_register extends StatelessWidget {
                   },
                   controller: email,
                   hintText: "Enter your email",
-                  suffixIcon: Icon(Icons.email,color: KPrimayColor,),
+                  suffixIcon: Icon(
+                    Icons.email,
+                    color: KPrimayColor,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextField(
@@ -67,17 +74,40 @@ class content_body_register extends StatelessWidget {
                   },
                   controller: username,
                   hintText: "Enter your username",
-                  suffixIcon: Icon(Icons.person,color: KPrimayColor,),
+                  suffixIcon: Icon(
+                    Icons.person,
+                    color: KPrimayColor,
+                  ),
                 ),
                 SizedBox(height: 20),
                 CustomTextField(
                   obscureText: false,
                   validator: (val) {
-                    return validatePhone(val);
+                    if (val == null) {
+                      return "Solde can t be empty";
+                    }
                   },
-                  controller: phone,
-                  hintText: "Enter your phone",
-                  suffixIcon: Icon(Icons.phone,color: KPrimayColor,),
+                  controller: solde,
+                  hintText: "Enter your solde",
+                  suffixIcon: Icon(
+                    Icons.money,
+                    color: KPrimayColor,
+                  ),
+                ),
+                SizedBox(height: 20),
+                CustomTextField(
+                  obscureText: false,
+                  validator: (val) {
+                    if (val == null) {
+                      return "Age can t be empty";
+                    }
+                  },
+                  controller: age,
+                  hintText: "Enter your age",
+                  suffixIcon: Icon(
+                    Icons.calendar_month,
+                    color: KPrimayColor,
+                  ),
                 ),
                 SizedBox(height: 20),
                 CustomTextField(
@@ -87,7 +117,10 @@ class content_body_register extends StatelessWidget {
                   },
                   controller: password,
                   hintText: "Enter your password",
-                  suffixIcon: Icon(Icons.lock,color: KPrimayColor,),
+                  suffixIcon: Icon(
+                    Icons.lock,
+                    color: KPrimayColor,
+                  ),
                 ),
                 SizedBox(height: 30),
                 CustomTextField(
@@ -97,29 +130,34 @@ class content_body_register extends StatelessWidget {
                   },
                   controller: confirmPassword,
                   hintText: "Confirm your password",
-                  suffixIcon: Icon(Icons.lock,color: KPrimayColor,),
+                  suffixIcon: Icon(
+                    Icons.lock,
+                    color: KPrimayColor,
+                  ),
                 ),
                 SizedBox(height: 30),
                 CustomButton(
-                    text: "Register",
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        //   if(password.text!=confirmPassword.text){
-                        //     snackbarerror(context, "The password and the confirm password are not equal !");
-                        //     return ;
-                        //   }
-                        //   User user = User(
-                        //       email: email.text,
-                        //       username: username.text,
-                        //       phone: phone.text,
-                        //       password: password.text,
-                        //       password_confirmation: confirmPassword.text);
-
-                        //   BlocProvider.of<AuthenticationCubit>(context)
-                        //       .signIn(user);
-                        // }
+                  text: "Register",
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      if (password.text != confirmPassword.text) {
+                        snackbarerror(context,
+                            "The password and the confirm password are not equal !");
+                        return;
                       }
-                    }),
+                      User user = User(
+                          email: email.text,
+                          username: username.text,
+                          age: int.parse(age.text),
+                          solde: solde.text,
+                          password: password.text,
+                          password_confirmation: confirmPassword.text);
+
+                      BlocProvider.of<AuthenticationCubit>(context)
+                          .signIn(user);
+                    }
+                  },
+                ),
                 SizedBox(
                   height: 5,
                 ),

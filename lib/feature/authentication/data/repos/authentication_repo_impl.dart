@@ -76,7 +76,7 @@ class AuthenticationRepoImpl implements AuthenticationRepo {
       var response;
       try {
         response = await dio.get(
-          Applink.apiUserDetails,
+         "",
           options: Options(
             headers: {
               "Authorization": "Bearer $token",

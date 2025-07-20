@@ -7,8 +7,12 @@ import 'package:hotel/feature/authentication/presentation/manager/cubit/authenti
 import 'package:hotel/feature/authentication/presentation/view/login_view.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/homescrren.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+late SharedPreferences sharedPreferences;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  sharedPreferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -26,7 +30,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Homescrrenview(),
+        home: sharedPreferences.getString("token") == null
+            ? LoginView()
+            : Homescrrenview(),
         routes: AppRouter.pageRoutes,
       ),
     );

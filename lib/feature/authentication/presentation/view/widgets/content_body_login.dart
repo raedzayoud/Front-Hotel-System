@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel/constant.dart';
 import 'package:hotel/core/utils/assets.dart';
 import 'package:hotel/core/utils/function/validator.dart';
+import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_button.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_image.dart';
 import 'package:hotel/feature/authentication/presentation/view/widgets/custom_password_forget.dart';
@@ -79,13 +80,11 @@ class content_body_login extends StatelessWidget {
               CustomButton(
                 text: "Login",
                 onPressed: () {
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil("Homescrrenview", (route) => false);
-                  if (_formKey.currentState!.validate()) {
-                    // BlocProvider.of<AuthenticationCubit>(context).login(
-                    //   username.text,
-                    //   password.text,
-                    // );
+                   if (_formKey.currentState!.validate()) {
+                    BlocProvider.of<AuthenticationCubit>(context).login(
+                      username.text,
+                      password.text,
+                    );
                   }
                 },
               ),
@@ -108,17 +107,6 @@ class content_body_login extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-              CustomButton(
-                text: "Continue with Google",
-                onPressed: () {
-                  // try {
-                  //   BlocProvider.of<AuthenticationCubit>(context)
-                  //       .signInWithGoogle();
-                  // } on Exception catch (e) {
-                  //   // TODO
-                  // }
-                },
               ),
               const SizedBox(
                 height: 5,
