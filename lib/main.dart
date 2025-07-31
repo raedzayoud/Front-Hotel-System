@@ -5,8 +5,10 @@ import 'package:hotel/core/utils/router.dart';
 import 'package:hotel/feature/authentication/data/repos/authentication_repo_impl.dart';
 import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/login_view.dart';
+import 'package:hotel/feature/home/data/repos/home_repos_impl.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/homescrren.dart';
+import 'package:hotel/feature/home/presentation/manager/home_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPreferences;
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthenticationCubit>(
           create: (context) => AuthenticationCubit(AuthenticationRepoImpl()),
+        ),
+        BlocProvider<HomeCubit>(
+          create: (context) => HomeCubit(HomeReposImpl()),
         ),
         // Add other BLoCs here if needed, like AuthBloc, HotelBloc, etc.
       ],

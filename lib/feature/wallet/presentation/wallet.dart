@@ -14,23 +14,22 @@ class Wallet extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 70),
-            Center(
-              child: Container(
-                height: AppResponsive.heigth(context) * .4,
-                width: AppResponsive.width(context) * .8,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Image.asset(
-                    AssetsImage.wallet,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
+            // Center(
+            //   child: Container(
+            //     height: AppResponsive.heigth(context) * .4,
+            //     width: AppResponsive.width(context) * .8,
+            //     decoration: BoxDecoration(
+            //       color: Colors.white,
+            //       borderRadius: BorderRadius.circular(20),
+            //     ),
+            //     child: Center(
+            //       child: Image.asset(
+            //         AssetsImage.wallet,
+            //         fit: BoxFit.contain,
+            //       ),
+            //     ),
+            //   ),
+            // ),
             const Text(
               "Your Wallet",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),

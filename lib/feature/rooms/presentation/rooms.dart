@@ -41,7 +41,7 @@ class Rooms extends StatelessWidget {
             )),
         centerTitle: true,
         title: const Text(
-          'Rooms in Beach Resort',
+          'Rooms',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: KPrimayColor,
