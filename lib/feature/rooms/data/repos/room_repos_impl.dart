@@ -4,9 +4,10 @@ import 'package:hotel/core/error/failure.dart';
 import 'package:hotel/core/utils/function/checkinternet.dart';
 import 'package:hotel/feature/home/data/repos/home_repo.dart';
 import 'package:dio/dio.dart';
+import 'package:hotel/feature/rooms/data/repos/room_repo.dart';
 import 'package:hotel/main.dart';
 
-class HomeReposImpl implements HomeRepo {
+class RoomReposImpl implements RoomRepo {
   final Dio dio = Dio(BaseOptions(
     headers: {
       'Accept': 'application/json', // Ensure Laravel returns JSON
@@ -14,27 +15,21 @@ class HomeReposImpl implements HomeRepo {
     },
   ));
   @override
-  Future<Either<Failure, void>> SearchHotel() {
-    // TODO: implement SearchHotel
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Either<Failure, List>> getAllHotel() async {
+  Future<Either<Failure, List>> getAllRooms(String idHotel) async {
     if (await checkInternet()) {
       //print(user.toJson());
       var response;
       try {
         response = await dio.get(
-          Applink.apiGetAllHotel,
+          Applink.apiGetAllRoomRelatedToHotel + "/" + idHotel,
           options: Options(
             headers: {
               "Authorization": "Bearer ${sharedPreferences.getString("token")}",
             },
           ),
         );
-        List hotels = response.data['hotel'];
-        return Right(hotels);
+        List rooms = response.data['rooms'];
+        return Right(rooms);
       } catch (e) {
         if (e is DioException) {
           return Left(ServeurFailure.fromDioError(e));

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel/core/utils/assets.dart';
 import 'package:hotel/feature/home/presentation/manager/home_cubit.dart';
 import 'package:hotel/feature/home/presentation/manager/home_state.dart';
+import 'package:hotel/feature/rooms/presentation/view/rooms.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -113,7 +114,13 @@ class _HomeState extends State<Home> {
                         final hotel = hotels[index];
                         return InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, "Rooms");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Rooms(idHotel: hotel['id']),
+                              ),
+                            );
                           },
                           child: _buildHotelCard(
                             imagePath: AssetsImage.hotel2, // Default image

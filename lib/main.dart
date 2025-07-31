@@ -9,6 +9,8 @@ import 'package:hotel/feature/home/data/repos/home_repos_impl.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/homescrren.dart';
 import 'package:hotel/feature/home/presentation/manager/home_cubit.dart';
+import 'package:hotel/feature/rooms/data/repos/room_repos_impl.dart';
+import 'package:hotel/feature/rooms/presentation/manager/room_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPreferences;
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeCubit>(
           create: (context) => HomeCubit(HomeReposImpl()),
+        ),
+        BlocProvider<RoomCubit>(
+          create: (context) => RoomCubit(RoomReposImpl()),
         ),
         // Add other BLoCs here if needed, like AuthBloc, HotelBloc, etc.
       ],
