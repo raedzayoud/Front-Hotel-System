@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel/constant.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hotel/core/utils/assets.dart';
 import 'package:hotel/feature/rooms/presentation/manager/room_cubit.dart';
 import 'package:hotel/feature/rooms/presentation/manager/room_state.dart';
 
@@ -13,6 +14,12 @@ class Rooms extends StatefulWidget {
 }
 
 class _RoomsState extends State<Rooms> {
+  final List<String> _roomImages = [
+    AssetsImage.room1,
+    AssetsImage.room2,
+    AssetsImage.room3,
+    AssetsImage.room4,
+  ];
   @override
   void initState() {
     super.initState();
@@ -68,9 +75,9 @@ class _RoomsState extends State<Rooms> {
                       ClipRRect(
                         borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(12)),
-                        child: room['image'] != null
-                            ? Image.network(
-                                room['image'],
+                        child: (index < _roomImages.length)
+                            ? Image.asset(
+                                _roomImages[index],
                                 height: 160,
                                 width: double.infinity,
                                 fit: BoxFit.cover,
@@ -104,7 +111,11 @@ class _RoomsState extends State<Rooms> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, "roomdetails");
+                                    Navigator.pushNamed(context, "roomdetails",
+                                        arguments: {
+                                          'roomDetails': room,
+                                          'image': _roomImages[index],
+                                        });
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: KPrimayColor,

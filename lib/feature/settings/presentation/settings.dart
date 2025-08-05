@@ -24,8 +24,13 @@ class Settings extends StatelessWidget {
             child: Column(
               children: [
                 const CircleAvatar(
+                  backgroundColor: Colors.blueAccent,
                   radius: 50,
-                  child: Icon(Icons.person),
+                  child: Icon(
+                    Icons.person,
+                    size: 50,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 const Text(

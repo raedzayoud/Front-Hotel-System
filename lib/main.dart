@@ -11,6 +11,8 @@ import 'package:hotel/feature/home/presentation/homescrren.dart';
 import 'package:hotel/feature/home/presentation/manager/home_cubit.dart';
 import 'package:hotel/feature/rooms/data/repos/room_repos_impl.dart';
 import 'package:hotel/feature/rooms/presentation/manager/room_cubit.dart';
+import 'package:hotel/feature/wallet/data/repos/wallet_repos_impl.dart';
+import 'package:hotel/feature/wallet/presentation/manager/wallet_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPreferences;
@@ -35,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<RoomCubit>(
           create: (context) => RoomCubit(RoomReposImpl()),
+        ),
+        BlocProvider<WalletCubit>(
+          create: (context) => WalletCubit(WalletReposImpl()),
         ),
         // Add other BLoCs here if needed, like AuthBloc, HotelBloc, etc.
       ],

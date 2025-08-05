@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hotel/constant.dart';
-import 'package:hotel/core/utils/assets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel/core/utils/responsive.dart';
+import 'package:hotel/feature/wallet/presentation/manager/wallet_cubit.dart';
+import 'package:hotel/feature/wallet/presentation/manager/wallet_state.dart';
+import 'package:hotel/main.dart';
 
 class Wallet extends StatelessWidget {
   const Wallet({super.key});
@@ -14,32 +16,43 @@ class Wallet extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 70),
-            // Center(
-            //   child: Container(
-            //     height: AppResponsive.heigth(context) * .4,
-            //     width: AppResponsive.width(context) * .8,
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(20),
-            //     ),
-            //     child: Center(
-            //       child: Image.asset(
-            //         AssetsImage.wallet,
-            //         fit: BoxFit.contain,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             const Text(
               "Your Wallet",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
+
             const SizedBox(height: 30),
-            const Text(
-              "\$0",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+
+            /// BlocBuilder to show current balance
+            BlocBuilder<WalletCubit, WalletState>(
+              builder: (context, state) {
+                if (state is WalletLoading) {
+                  return const CircularProgressIndicator();
+                } else if (state is WalletSuccess) {
+                  return Text(
+                    "\$${state.solde == 0 ? sharedPreferences.getInt("solde") : state.solde}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
+                  );
+                } else if (state is WalletFailure) {
+                  return Text(
+                    "Error: ${state.errorMessage}",
+                    style: const TextStyle(color: Colors.red),
+                  );
+                } else {
+                  return const Text(
+                    "\$0",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  );
+                }
+              },
             ),
+
             const SizedBox(height: 30),
+
+            /// Add Amount Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [50, 100, 200].map((amount) {
@@ -48,10 +61,12 @@ class Wallet extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   height: 60,
-                  onPressed: () {},
+                  onPressed: () {
+                    BlocProvider.of<WalletCubit>(context).addAmount(amount);
+                  },
                   color: Colors.blue,
                   child: Text(
-                    "$amount",
+                    "\$$amount",
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -61,23 +76,13 @@ class Wallet extends StatelessWidget {
                 );
               }).toList(),
             ),
+
             const SizedBox(height: 20),
-            MaterialButton(
-              shape:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-              height: 50,
-              minWidth: AppResponsive.width(context) * .9,
-              color: Colors.black,
-              onPressed: () {},
-              child: const Text(
-                "Add Money",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-            ),
-            const SizedBox(height: 20),
+
+            /// Transactions Section
             Container(
               width: double.infinity,
-              height: AppResponsive.heigth(context) * .8,
+              height: AppResponsive.heigth(context) * 130 / 100,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: const BorderRadius.only(
@@ -97,15 +102,13 @@ class Wallet extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Expanded(
-                    child: ListView(
-                      children: List.generate(
-                        20,
-                        (index) => ListTile(
-                          leading: const Icon(Icons.monetization_on),
-                          title: Text("Transaction #$index"),
-                          subtitle: Text("Details of transaction $index"),
-                          trailing: const Text("-\$10"),
-                        ),
+                    child: ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: const Icon(Icons.monetization_on),
+                        title: Text("Transaction #$index"),
+                        subtitle: Text("Details of transaction $index"),
+                        trailing: const Text("-\$10"),
                       ),
                     ),
                   ),

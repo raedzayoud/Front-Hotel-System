@@ -21,4 +21,17 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeFailure(errorMessage: "An error occurred"));
     }
   }
+
+  Future<void> getProfile() async {
+    emit(HomeLoading());
+    try {
+      final result = await homeRepo.getProfile();
+      result.fold(
+        (failure) => emit(HomeFailure(errorMessage: failure.errorMessage)),
+        (hotels) => emit(HomeSuccess(hotels: [])),
+      );
+    } catch (e) {
+      emit(HomeFailure(errorMessage: "An error occurred"));
+    }
+  }
 }

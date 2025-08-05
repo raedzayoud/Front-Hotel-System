@@ -45,4 +45,35 @@ class HomeReposImpl implements HomeRepo {
       return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> getProfile() async {
+    if (await checkInternet()) {
+      //print(user.toJson());
+      var response;
+      try {
+        response = await dio.get(
+          Applink.apiGetProfile,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+            },
+          ),
+        );
+        final profile = response.data['data'];
+        sharedPreferences.setString("name", profile['name']);
+        sharedPreferences.setString("email", profile['email']);
+        sharedPreferences.setInt("solde", profile['solde']);
+        sharedPreferences.setString("age", profile['age'].toString());
+        return Right(null);
+      } catch (e) {
+        if (e is DioException) {
+          return Left(ServeurFailure.fromDioError(e));
+        }
+        return Left(ServeurFailure(errorsMessage: e.toString()));
+      }
+    } else {
+      return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
+    }
+  }
 }

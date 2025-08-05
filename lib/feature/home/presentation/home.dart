@@ -4,6 +4,7 @@ import 'package:hotel/core/utils/assets.dart';
 import 'package:hotel/feature/home/presentation/manager/home_cubit.dart';
 import 'package:hotel/feature/home/presentation/manager/home_state.dart';
 import 'package:hotel/feature/rooms/presentation/view/rooms.dart';
+import 'package:hotel/main.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,10 +14,25 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final List<String> _hotelImages = [
+    AssetsImage.hotel1,
+    AssetsImage.hotel2,
+    AssetsImage.hotel3,
+    AssetsImage.hotel4,
+    AssetsImage.hotel5,
+    AssetsImage.hotel6,
+  ];
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<HomeCubit>(context).getAllHotels();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final homeCubit = BlocProvider.of<HomeCubit>(context);
+      homeCubit.getAllHotels();
+      //homeCubit.getProfile();
+
+      print((sharedPreferences.getString("name") ?? "") + " ===========");
+      print((sharedPreferences.getInt("solde") ?? ""));
+    });
   }
 
   @override
@@ -46,7 +62,7 @@ class _HomeState extends State<Home> {
                             bottomRight: Radius.circular(50),
                           ),
                           child: Image.asset(
-                            AssetsImage.hotel1,
+                            AssetsImage.hotel5,
                             height: 250,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -123,7 +139,7 @@ class _HomeState extends State<Home> {
                             );
                           },
                           child: _buildHotelCard(
-                            imagePath: AssetsImage.hotel2, // Default image
+                            imagePath: _hotelImages[index], // Default image
                             title: hotel['name'] ?? 'Unknown',
                             location: hotel['location'] ?? 'Tunisia',
                             rating:
@@ -135,7 +151,7 @@ class _HomeState extends State<Home> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   // Section Title
                   const Padding(
@@ -146,17 +162,17 @@ class _HomeState extends State<Home> {
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 10),
 
                   // Vertical Cards List
                   ListView.builder(
+                    padding: EdgeInsets.all(0),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: hotels.length,
                     itemBuilder: (context, index) {
                       final hotel = hotels[index];
                       return _buildHotelCard(
-                        imagePath: AssetsImage.hotel2,
+                        imagePath: _hotelImages[index],
                         title: hotel['name'] ?? 'Unknown',
                         location: hotel['location'] ?? 'Tunisia',
                         rating:
