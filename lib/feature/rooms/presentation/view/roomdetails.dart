@@ -52,7 +52,8 @@ class _RoomDetailsState extends State<RoomDetails> {
 
   Future<void> _selectDateOut(BuildContext context) async {
     // Date minimale pour la sortie = date entrée ou aujourd'hui si entrée non définie
-    final DateTime minDate = _selectedDateIn ?? DateTime.now();
+    final DateTime minDate =
+        (_selectedDateIn ?? DateTime.now()).add(const Duration(days: 1));
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,

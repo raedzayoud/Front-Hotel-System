@@ -15,13 +15,14 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
   @override
   void initState() {
-    init();
+    // sharedPreferences.clear();
+    // init();
     super.initState();
   }
 
-  void init() async {
-    await BlocProvider.of<HomeCubit>(context).getProfile();
-  }
+  // void init() async {
+  //   await BlocProvider.of<HomeCubit>(context).getProfile();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,8 @@ class _WalletState extends State<Wallet> {
                         style: const TextStyle(color: Colors.red),
                       );
                     } else {
-                      return _walletCard(0);
+                      return _walletCard(
+                          sharedPreferences.getInt("solde") ?? 0);
                     }
                   },
                 ),
