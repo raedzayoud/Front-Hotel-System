@@ -23,15 +23,23 @@ class _HomeState extends State<Home> {
     AssetsImage.hotel6,
   ];
   @override
+  @override
   void initState() {
     super.initState();
+
+    // Call async method without making initState async
+    _initData();
+  }
+
+  Future<void> _initData() async {
+    // First load profile
+    // Then execute after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeCubit = BlocProvider.of<HomeCubit>(context);
       homeCubit.getAllHotels();
       //homeCubit.getProfile();
-
-      print((sharedPreferences.getString("name") ?? "") + " ===========");
-      print((sharedPreferences.getInt("solde") ?? ""));
+      print("========================");
+      print(sharedPreferences.getInt("solde"));
     });
   }
 

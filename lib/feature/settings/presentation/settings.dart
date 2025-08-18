@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hotel/main.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -84,6 +85,7 @@ class Settings extends StatelessWidget {
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Log Out", style: TextStyle(color: Colors.red)),
             onTap: () {
+              sharedPreferences.clear();
               Navigator.pushNamedAndRemoveUntil(
                   context, "login", (route) => false);
             },

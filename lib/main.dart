@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthenticationCubit(AuthenticationRepoImpl()),
         ),
         BlocProvider<HomeCubit>(
-          create: (context) => HomeCubit(HomeReposImpl()),
+          create: (context) => HomeCubit(HomeReposImpl()..getProfile()),
         ),
         BlocProvider<RoomCubit>(
           create: (context) => RoomCubit(RoomReposImpl()),

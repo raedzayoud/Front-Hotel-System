@@ -40,4 +40,32 @@ class RoomReposImpl implements RoomRepo {
       return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> bookingRoom(String idRoom, int price) async {
+    if (await checkInternet()) {
+      //print(user.toJson());
+      var response;
+      try {
+        response = await dio.post(
+          Applink.booking + "/" + idRoom,
+          data: {'price': price},
+          options: Options(
+            headers: {
+              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+            },
+          ),
+        );
+        String message = response.data['message'];
+        return Right(message);
+      } catch (e) {
+        if (e is DioException) {
+          return Left(ServeurFailure.fromDioError(e));
+        }
+        return Left(ServeurFailure(errorsMessage: e.toString()));
+      }
+    } else {
+      return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
+    }
+  }
 }

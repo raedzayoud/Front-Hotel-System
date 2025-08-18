@@ -5,4 +5,5 @@ import 'package:dio/dio.dart';
 
 abstract class RoomRepo {
   Future<Either<Failure, List>> getAllRooms(String idHotel);
+  Future<Either<Failure, String>> bookingRoom(String idRoom, int price);
 }

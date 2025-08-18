@@ -20,4 +20,17 @@ class RoomCubit extends Cubit<RoomState> {
       emit(RoomFailure(errorMessage: "An error occurred"));
     }
   }
+
+  Future<void> BookingRoom(String idRoom, int price) async {
+    emit(RoomLoading());
+    try {
+      final result = await roomRepo.bookingRoom(idRoom, price);
+      result.fold(
+        (failure) => emit(RoomFailure(errorMessage: failure.errorMessage)),
+        (rooms) => emit(RoomSuccess(rooms: [])),
+      );
+    } catch (e) {
+      emit(RoomFailure(errorMessage: "An error occurred"));
+    }
+  }
 }

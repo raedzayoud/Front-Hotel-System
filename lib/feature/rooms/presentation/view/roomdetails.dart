@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hotel/constant.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hotel/core/utils/assets.dart';
+import 'package:hotel/core/utils/function/snackbar.dart';
+import 'package:hotel/core/utils/function/successsnackbar.dart';
+import 'package:hotel/feature/rooms/presentation/manager/room_cubit.dart';
+import 'package:hotel/feature/rooms/presentation/manager/room_state.dart';
 
 class RoomDetails extends StatefulWidget {
   const RoomDetails({super.key});
@@ -75,7 +80,7 @@ class _RoomDetailsState extends State<RoomDetails> {
     return 0;
   }
 
-  num _calculateTotalPrice() {
+  int _calculateTotalPrice() {
     final nights = _calculateNumberOfNights();
 
     final pricePerNight = roomDetails != null ? (roomDetails['price'] ?? 0) : 0;
@@ -83,7 +88,8 @@ class _RoomDetailsState extends State<RoomDetails> {
     // Safely parse number of people (default to 1 if empty or invalid)
     final numberOfPeople = int.tryParse(_nbreofpersonne.text) ?? 1;
 
-    return nights * numberOfPeople * pricePerNight.toDouble();
+    // Multiply and round to nearest integer
+    return (nights * numberOfPeople * pricePerNight.toDouble()).round();
   }
 
   @override
@@ -319,60 +325,76 @@ class _RoomDetailsState extends State<RoomDetails> {
               height: 10,
             ),
             // Price and Book Now
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "\$${roomDetails['price']} / night",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
+            BlocListener<RoomCubit, RoomState>(
+              listener: (context, state) {
+                if (state is RoomSuccess) {
+                  snackbarsuccess(context, "Booking created succesfully");
+                } else if (state is RoomFailure) {
+                  snackbarerror(context, state.errorMessage);
+                }
+              },
+              child: BlocBuilder<RoomCubit, RoomState>(
+                builder: (context, state) {
+                  if (state is RoomLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "\$${roomDetails['price']} / night",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            if (_calculateNumberOfNights() > 0)
+                              Text(
+                                "Total: \$${_calculateTotalPrice()} (${_calculateNumberOfNights()} nights)",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: KPrimayColor,
+                                ),
+                              ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (_calculateNumberOfNights() > 0)
-                        Text(
-                          "Total: \$${_calculateTotalPrice()} (${_calculateNumberOfNights()} nights)",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: KPrimayColor,
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              BlocProvider.of<RoomCubit>(context).BookingRoom(
+                                  roomDetails['id'].toString(),
+                                  _calculateTotalPrice());
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: KPrimayColor,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text(
+                            "Book Now",
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Handle booking logic here
-                        // For example, navigate to a booking confirmation page
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Booking confirmed!")),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: KPrimayColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      ],
                     ),
-                    child: const Text(
-                      "Book Now",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
 

@@ -5,6 +5,7 @@ class Applink {
   static const String apiGetAllHotel = '$loaclhost/getAllHotel';
   static const String apiGetProfile = '$loaclhost/getprofile';
   static const String addSolde = '$loaclhost/addSolde';
+  static const String booking = '$loaclhost/BookingRoom';
   static const String apiGetAllRoomRelatedToHotel =
       '$loaclhost/getAllRoomByHotel';
 }
