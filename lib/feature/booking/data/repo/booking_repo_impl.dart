@@ -8,6 +8,7 @@ import 'package:hotel/core/utils/function/checkinternet.dart';
 import 'package:hotel/feature/authentication/data/model/user.dart';
 import 'package:hotel/feature/authentication/data/repos/authentication_repo.dart';
 import 'package:hotel/feature/booking/data/repo/booking_repo.dart';
+import 'package:hotel/main.dart';
 
 class BookingRepoImpl implements BookingRepo {
   final Dio dio = Dio(BaseOptions(
@@ -18,16 +19,20 @@ class BookingRepoImpl implements BookingRepo {
   ));
 
   @override
-  Future<Either<Failure, List<Map<String, dynamic>>>>
-      getIncomingPastRooms() async {
+  Future<Either<Failure, List<dynamic>>> getIncomingPastRooms() async {
     if (await checkInternet()) {
       //print(user.toJson());
       var response;
       try {
         response = await dio.get(
           Applink.getIncomingPastRooms,
+          options: Options(
+            headers: {
+              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+            },
+          ),
         );
-        List<Map<String, dynamic>> list = response.data['data'];
+        List<dynamic> list = response.data['data'];
         return Right(list);
       } catch (e) {
         if (e is DioException) {

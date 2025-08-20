@@ -13,6 +13,6 @@ final class bookingFailure extends bookingState {
 }
 
 final class bookingSuccess extends bookingState {
-  final List<Map<String, dynamic>> list;
+  final List<dynamic> list;
   bookingSuccess({required this.list});
 }

@@ -34,13 +34,14 @@ class Settings extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  "Raed Zayoud",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  sharedPreferences.getString("name") ?? "",
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const Text(
-                  "raedzayoud@example.com",
-                  style: TextStyle(color: Colors.grey),
+                Text(
+                  sharedPreferences.getString("email") ?? "",
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
@@ -86,6 +87,7 @@ class Settings extends StatelessWidget {
             title: const Text("Log Out", style: TextStyle(color: Colors.red)),
             onTap: () {
               sharedPreferences.clear();
+              tokenSharedPreferences.clear();
               Navigator.pushNamedAndRemoveUntil(
                   context, "login", (route) => false);
             },

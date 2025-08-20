@@ -5,6 +5,8 @@ import 'package:hotel/core/utils/router.dart';
 import 'package:hotel/feature/authentication/data/repos/authentication_repo_impl.dart';
 import 'package:hotel/feature/authentication/presentation/manager/cubit/authentication_cubit.dart';
 import 'package:hotel/feature/authentication/presentation/view/login_view.dart';
+import 'package:hotel/feature/booking/data/repo/booking_repo_impl.dart';
+import 'package:hotel/feature/booking/presentation/cubit/booking_cubit.dart';
 import 'package:hotel/feature/home/data/repos/home_repos_impl.dart';
 import 'package:hotel/feature/home/presentation/home.dart';
 import 'package:hotel/feature/home/presentation/homescrren.dart';
@@ -16,9 +18,11 @@ import 'package:hotel/feature/wallet/presentation/manager/wallet_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences sharedPreferences;
+late SharedPreferences tokenSharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
+  tokenSharedPreferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -31,6 +35,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthenticationCubit>(
           create: (context) => AuthenticationCubit(AuthenticationRepoImpl()),
+        ),
+
+        BlocProvider<bookingCubit>(
+          create: (context) => bookingCubit(BookingRepoImpl()),
         ),
         BlocProvider<HomeCubit>(
           create: (context) => HomeCubit(HomeReposImpl()..getProfile()),
@@ -45,7 +53,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: sharedPreferences.getString("token") == null
+        home: tokenSharedPreferences.getString("token") == null
             ? LoginView()
             : Homescrrenview(),
         routes: AppRouter.pageRoutes,

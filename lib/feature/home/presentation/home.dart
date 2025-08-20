@@ -22,22 +22,19 @@ class _HomeState extends State<Home> {
     AssetsImage.hotel5,
     AssetsImage.hotel6,
   ];
-  @override
+
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-
-    // Call async method without making initState async
     _initData();
   }
 
   Future<void> _initData() async {
-    // First load profile
-    // Then execute after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final homeCubit = BlocProvider.of<HomeCubit>(context);
       homeCubit.getAllHotels();
-      //homeCubit.getProfile();
       print("========================");
       print(sharedPreferences.getInt("solde"));
     });
@@ -48,12 +45,17 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          if (state is HomeLoading) {
+          if (state is HomeLoading || state is SearchLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is HomeFailure) {
-            return Center(child: Text(state.errorMessage));
-          } else if (state is HomeSuccess) {
-            final hotels = state.hotels;
+          } else if (state is HomeFailure || state is SearchFailure) {
+            final errorMessage = state is HomeFailure
+                ? state.errorMessage
+                : (state as SearchFailure).errorMessage;
+            return Center(child: Text(errorMessage));
+          } else if (state is HomeSuccess || state is SearchSuccess) {
+            final hotels = state is HomeSuccess
+                ? state.hotels
+                : (state as SearchSuccess).hotels;
 
             return SingleChildScrollView(
               child: Column(
@@ -100,6 +102,13 @@ class _HomeState extends State<Home> {
                           right: 20,
                           top: 100,
                           child: TextFormField(
+                            onChanged: (value) {
+                              if (value.isEmpty) {
+                                BlocProvider.of<HomeCubit>(context)
+                                    .getAllHotels();
+                              }
+                            },
+                            controller: _searchController,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white.withOpacity(0.9),
@@ -107,7 +116,20 @@ class _HomeState extends State<Home> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              prefixIcon: const Icon(Icons.search),
+                              prefixIcon: IconButton(
+                                  onPressed: () {
+                                    BlocProvider.of<HomeCubit>(context)
+                                        .searchHotels(_searchController.text);
+                                  },
+                                  icon: Icon(Icons.search)),
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  BlocProvider.of<HomeCubit>(context)
+                                      .getAllHotels();
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -147,7 +169,8 @@ class _HomeState extends State<Home> {
                             );
                           },
                           child: _buildHotelCard(
-                            imagePath: _hotelImages[index], // Default image
+                            imagePath:
+                                _hotelImages[index % _hotelImages.length],
                             title: hotel['name'] ?? 'Unknown',
                             location: hotel['location'] ?? 'Tunisia',
                             rating:
@@ -173,14 +196,14 @@ class _HomeState extends State<Home> {
 
                   // Vertical Cards List
                   ListView.builder(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: hotels.length,
                     itemBuilder: (context, index) {
                       final hotel = hotels[index];
                       return _buildHotelCard(
-                        imagePath: _hotelImages[index],
+                        imagePath: _hotelImages[index % _hotelImages.length],
                         title: hotel['name'] ?? 'Unknown',
                         location: hotel['location'] ?? 'Tunisia',
                         rating:

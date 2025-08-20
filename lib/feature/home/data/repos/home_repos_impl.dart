@@ -14,9 +14,31 @@ class HomeReposImpl implements HomeRepo {
     },
   ));
   @override
-  Future<Either<Failure, void>> SearchHotel() {
-    // TODO: implement SearchHotel
-    throw UnimplementedError();
+  Future<Either<Failure, List>> SearchHotel(String name) async {
+    if (await checkInternet()) {
+      //print(user.toJson());
+      var response;
+      try {
+        response = await dio.post(
+          Applink.getSearchHotel,
+          data: {'name': name},
+          options: Options(
+            headers: {
+              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+            },
+          ),
+        );
+        List hotels = response.data['hotel'];
+        return Right(hotels);
+      } catch (e) {
+        if (e is DioException) {
+          return Left(ServeurFailure.fromDioError(e));
+        }
+        return Left(ServeurFailure(errorsMessage: e.toString()));
+      }
+    } else {
+      return Left(ServeurFailure(errorsMessage: "No Internet Connection"));
+    }
   }
 
   @override
@@ -29,7 +51,8 @@ class HomeReposImpl implements HomeRepo {
           Applink.apiGetAllHotel,
           options: Options(
             headers: {
-              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+              "Authorization":
+                  "Bearer ${tokenSharedPreferences.getString("token")}",
             },
           ),
         );
@@ -56,7 +79,8 @@ class HomeReposImpl implements HomeRepo {
           Applink.apiGetProfile,
           options: Options(
             headers: {
-              "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+              "Authorization":
+                  "Bearer ${tokenSharedPreferences.getString("token")}",
             },
           ),
         );

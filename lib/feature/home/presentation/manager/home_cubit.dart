@@ -22,6 +22,19 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<void> searchHotels(String name) async {
+    emit(SearchLoading());
+    try {
+      final result = await homeRepo.SearchHotel(name);
+      result.fold(
+        (failure) => emit(SearchFailure(errorMessage: failure.errorMessage)),
+        (hotels) => emit(SearchSuccess(hotels: hotels)),
+      );
+    } catch (e) {
+      emit(HomeFailure(errorMessage: "An error occurred"));
+    }
+  }
+
   Future<void> getProfile() async {
     emit(HomeLoading());
     try {

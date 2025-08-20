@@ -5,6 +5,6 @@ import 'package:dio/dio.dart';
 
 abstract class HomeRepo {
   Future<Either<Failure, List>> getAllHotel();
-  Future<Either<Failure, void>> SearchHotel();
+  Future<Either<Failure, List>> SearchHotel(String name);
   Future<Either<Failure, void>> getProfile();
 }

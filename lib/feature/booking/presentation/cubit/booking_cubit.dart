@@ -10,7 +10,7 @@ class bookingCubit extends Cubit<bookingState> {
   final BookingRepo bookingRepo;
   bookingCubit(this.bookingRepo) : super(bookingInitial());
 
-  Future<void> login(String username, String password) async {
+  Future<void> getAllRoomsByUser() async {
     emit(bookingLoading());
     try {
       final result = await bookingRepo.getIncomingPastRooms();

@@ -36,6 +36,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             snackbarerror(context, state.errorMessage);
           } else if (state is LoginSuccess) {
             sharedPreferences.setString("token", state.token);
+            tokenSharedPreferences.setString("token", state.token);
             BlocProvider.of<HomeCubit>(context).getProfile();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil("Homescrrenview", (route) => false);
